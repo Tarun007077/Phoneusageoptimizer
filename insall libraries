@@ -1,0 +1,49 @@
+# Cell 0 — Install & import dependencies
+# (Colab: uncomment the pip installs if needed)
+# !pip install gymnasium
+# !pip install torch
+# !pip install numpy pandas matplotlib scikit-learn
+
+import random
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+# Cell 0 — Install & import dependencies
+# (Colab: uncomment the pip installs if needed)
+# !pip install gymnasium
+# !pip install torch
+# !pip install numpy pandas matplotlib scikit-learn
+
+import random
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+# Cell 0 — Install & import dependencies
+# (Colab: uncomment the pip installs if needed)
+# !pip install gymnasium
+# !pip install torch
+# !pip install numpy pandas matplotlib scikit-learn
+
+import random
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import os
+import pickle
+from collections import defaultdict
+import math
+import warnings
+warnings.filterwarnings('ignore')
+
+# PyTorch
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+# Reproducibility
+SEED = 42
+random.seed(SEED)
+np.random.seed(SEED)
+torch.manual_seed(SEED)
+
+print('Environment ready. PyTorch version:', torch.__version__)
