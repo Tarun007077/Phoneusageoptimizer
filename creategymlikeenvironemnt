@@ -1,0 +1,47 @@
+# Cell 3 — Environment
+import gymnasium as gym
+from gymnasium import spaces
+
+class PhoneUsageEnv(gym.Env):
+    def __init__(self, data_df, scaled_data):
+        super().__init__()
+        self.df = data_df.reset_index(drop=True)
+        self.scaled = scaled_data
+        self.n = len(self.df)
+        self.observation_space = spaces.Box(low=-10.0, high=10.0, shape=(self.scaled.shape[1],), dtype=np.float32)
+        self.action_space = spaces.Discrete(4)
+        self.index = 0
+
+    def reset(self, seed=None, options=None):
+        self.index = np.random.randint(0, self.n)
+        return self.scaled[self.index], {}
+
+    def step(self, action):
+        idx = self.index
+        # raw values for reward calculations
+        sm = float(self.df.loc[idx, 'Social_Media_Usage_Hours'])
+        gm = float(self.df.loc[idx, 'Gaming_Usage_Hours'])
+        en = float(self.df.loc[idx, 'Entertainment_Apps_Hours'])
+        unproductive = sm + gm + en
+        satisfaction = float(self.df.loc[idx, 'self_reported_satisfaction'])
+
+        # Reward engineering
+        if action == 0:
+            reward = -0.2 * unproductive
+        elif action == 1:
+            reward = -0.1 * unproductive + 0.05 * satisfaction
+        elif action == 2:
+            reward = -0.05 * unproductive + 0.10 * satisfaction
+        elif action == 3:
+            reward = -0.03 * unproductive - 0.10  # autonomy cost
+
+        # move to next random index for next step (episodic single-step interactions)
+        self.index = np.random.randint(0, self.n)
+        next_state = self.scaled[self.index]
+        done = False
+        info = {'unproductive': unproductive, 'satisfaction': satisfaction}
+        return next_state, float(reward), done, False, info
+
+# instantiate environment
+env = PhoneUsageEnv(df_copy, X_scaled)
+print('Environment created. Action space:', env.action_space, 'Obs shape:', env.observation_space.shape)
